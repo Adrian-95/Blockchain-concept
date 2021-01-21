@@ -20,14 +20,14 @@ class Blockchain:
     def register_node(self, address):
         """
         Add a new node to the list of nodes
-        :param address: Address of node. Eg. 'http://192.168.0.5:5000'
+        :param address: Address of node. Example: 'http://192.168.0.5:8000'
         """
 
         parsed_url = urlparse(address)
         if parsed_url.netloc:
             self.nodes.add(parsed_url.netloc)
         elif parsed_url.path:
-            # Accepts an URL without scheme like '192.168.0.5:5000'.
+            # Accepts an URL without scheme like '192.168.0.5:8000, else returns error'.
             self.nodes.add(parsed_url.path)
         else:
             raise ValueError('Invalid URL')
@@ -48,12 +48,12 @@ class Blockchain:
             print(f'{last_block}')
             print(f'{block}')
             print("\n-----------\n")
-            # Check that the hash of the block is correct
+            # Check whether the hash of the block is correct
             last_block_hash = self.hash(last_block)
             if block['previous_hash'] != last_block_hash:
                 return False
 
-            # Check that the Proof of Work is correct
+            # Check whether Proof of Work is correct
             if not self.valid_proof(last_block['proof'], block['proof'], last_block_hash):
                 return False
 
