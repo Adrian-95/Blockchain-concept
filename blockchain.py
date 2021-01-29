@@ -10,7 +10,7 @@ import hashlib
 hash = hashlib.sha256("random transaction".encode()).hexdigest()
 #print(hash)
 
-#Hash returns "a06ceafb52852b5089ef0134d6814231ef401b2c45faf5f7bf3b0c115ef1d0e0" instead of "initial transaction"
+#Hash returns "a06ceafb52852b5089ef0134d6814231ef401b2c45faf5f7bf3b0c115ef1d0e0" instead of "random transaction"
 
 from block import Block
 
