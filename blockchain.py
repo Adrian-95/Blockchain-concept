@@ -1,63 +1,29 @@
+# CONCEPT
+# Blockchain consists of blocks, which consist of transactions.
+# Blocks are connected through "hashing", which are unique digital fingerprints
+
+
 import hashlib
-import json
-from time import time
-from urllib.parse import urlparse
-from uuid import uuid4
 
-import requests
-from flask import Flask, jsonify, request
+#Hashing example
 
+hash = hashlib.sha256("random transaction".encode()).hexdigest()
+#print(hash)
 
-class Blockchain:
-    def __init__(self):
-        self.current_transactions = []
-        self.chain = []
-        self.nodes = set()
+#Hash returns "a06ceafb52852b5089ef0134d6814231ef401b2c45faf5f7bf3b0c115ef1d0e0" instead of "initial transaction"
 
-        # Create the genesis block
-        self.new_block(previous_hash='1', proof=100)
+from block import Block
 
-    def register_node(self, address):
-        """
-        Add a new node to the list of nodes
-        :param address: Address of node. Example: 'http://192.168.0.5:8000'
-        """
+blockchain = []
 
-        parsed_url = urlparse(address)
-        if parsed_url.netloc:
-            self.nodes.add(parsed_url.netloc)
-        elif parsed_url.path:
-            # Accepts an URL without scheme like '192.168.0.5:8000, else returns error'.
-            self.nodes.add(parsed_url.path)
-        else:
-            raise ValueError('Invalid URL')
+genesis_block = Block("Initial Hash", ["Andrew sent 3 BTC to Ralph", "Sam sent 5 BTC to Mary", "George sent 2 BTC to William" ])
 
+#Each new block will get a different hash, and making any sort of changes to the block will generate a completely different hash"
 
-    def valid_chain(self, chain):
-        """
-        Determine if a given blockchain is valid
-        :param chain: A blockchain
-        :return: True if valid, False if not
-        """
+new_block = Block(genesis_block.block_hash, ["Brad sent 10 BTC to Jason", "Jack sent 4 BTC to Anne"])
 
-        last_block = chain[0]
-        current_index = 1
+print("Block hash: Genesis Block")
+print(genesis_block.block_hash)
 
-        while current_index < len(chain):
-            block = chain[current_index]
-            print(f'{last_block}')
-            print(f'{block}')
-            print("\n-----------\n")
-            # Check whether the hash of the block is correct
-            last_block_hash = self.hash(last_block)
-            if block['previous_hash'] != last_block_hash:
-                return False
-
-            # Check whether Proof of Work is correct
-            if not self.valid_proof(last_block['proof'], block['proof'], last_block_hash):
-                return False
-
-            last_block = block
-            current_index += 1
-
-        return True
+print("Block hash: New Block")
+print(new_block.block_hash)
